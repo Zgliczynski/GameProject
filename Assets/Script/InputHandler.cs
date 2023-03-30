@@ -7,13 +7,14 @@ public class InputHandler : MonoBehaviour
 {
     public event EventHandler OnSprintAction;
 
-    private PlayerInputAction playerInputAction;
+    public PlayerInputAction playerInputAction;
+
 
     private void Awake()
     {
         playerInputAction = new PlayerInputAction();
         playerInputAction.PlayerMovement.Enable();
-
+        
         playerInputAction.PlayerMovement.Sprint.performed += Sprint_performed;
     }
 
@@ -29,5 +30,6 @@ public class InputHandler : MonoBehaviour
         inputVector = inputVector.normalized;
         return inputVector;
     }
+
 }
 

@@ -8,8 +8,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float runSpeed = 7f;
     [SerializeField] InputHandler inputHandler;
 
-    private bool isWalking;
-    private bool isRunning;
+    [SerializeField] private bool isWalking;
+    [SerializeField] private bool isRunning;
     private Rigidbody rigidbody;
 
     private void Start()
@@ -21,12 +21,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void InputHandler_OnSprintAction(object sender, System.EventArgs e)
     {
-        Run();
+        isRunning = true;
+        
     }
 
     private void Update()
     {
         MovementHandler();
+        Run();
     }
 
     public bool IsWalking()
@@ -97,56 +99,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void Run()
     {
-        Vector2 inputVector = inputHandler.GetMovementVectorNormalized();
-
-        Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
-
-        float moveDistance = runSpeed * Time.deltaTime;
-        float playerRadius = 0.2f;
-        float playerHight = 1.8f;
-        bool canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHight, playerRadius, moveDir, moveDistance);
-
-        if (!canMove)
+        if(isRunning == true)
         {
-            //Cannot move towards moveDir
-
-            //Attemp only X movement
-            Vector3 moveDirX = new Vector3(moveDir.x, 0f, 0f).normalized;
-            canMove = moveDir.x != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHight, playerRadius, moveDirX, moveDistance);
-
-            if (canMove)
-            {
-                //Can move only on X
-                moveDir = moveDirX;
-            }
-            else
-            {
-                //Cannot move only on the X
-
-                //Attemp only Z movement
-                Vector3 moveDirZ = new Vector3(0f, 0f, moveDir.z).normalized;
-                canMove = moveDir.z != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHight, playerRadius, moveDirZ, moveDistance);
-
-                if (canMove)
-                {
-                    //Can move only on Z
-                    moveDir = moveDirZ;
-                }
-                else
-                {
-                    //Cannot move in any direction
-                }
-            }
+            moveSpeed = runSpeed;
         }
-
-        if (canMove)
+        else
         {
-            transform.position += moveDir * moveDistance;
+            moveSpeed = 3f;
+            IsRunning();
         }
-
-        isRunning = moveDir != Vector3.zero;
-
-        float rotateSpeed = 10f;
-        transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
     }
 }
