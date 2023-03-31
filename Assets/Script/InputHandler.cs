@@ -5,22 +5,37 @@ using UnityEngine;
 
 public class InputHandler : MonoBehaviour
 {
-    public event EventHandler OnSprintAction;
-
     public PlayerInputAction playerInputAction;
+
+    public bool sprintInput;
+
+    public bool canSprint;
 
 
     private void Awake()
     {
         playerInputAction = new PlayerInputAction();
         playerInputAction.PlayerMovement.Enable();
-        
-        playerInputAction.PlayerMovement.Sprint.performed += Sprint_performed;
     }
 
-    private void Sprint_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    public void UpdateInput()
     {
-        OnSprintAction?.Invoke(this, EventArgs.Empty);
+        SprintHandleInput();
+    }
+
+    private void SprintHandleInput()
+    {
+        //sprintInput = playerInputAction.PlayerMovement.Sprint.phase == UnityEngine.InputSystem.InputActionPhase.Started;
+
+        if (playerInputAction.PlayerMovement.Sprint.phase == UnityEngine.InputSystem.InputActionPhase.Started)
+        {
+            canSprint = true;
+        }
+        
+        if(playerInputAction.PlayerMovement.Sprint.phase == UnityEngine.InputSystem.InputActionPhase.Disabled)
+        {
+            canSprint = false;
+        }
     }
 
     public Vector2 GetMovementVectorNormalized()

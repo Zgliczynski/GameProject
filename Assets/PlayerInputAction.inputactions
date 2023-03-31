@@ -20,8 +20,17 @@
                     "id": "d1d01b88-6aed-4473-a418-3dee83f886c9",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press(behavior=1)",
+                    "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Run",
+                    "type": "Button",
+                    "id": "aef7167f-20b0-4045-9b32-b3c48ec79e95",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -165,6 +174,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Sprint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "162fdaae-eb18-42d9-b49b-9e0001943557",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Run",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

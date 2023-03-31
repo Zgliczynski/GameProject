@@ -15,20 +15,15 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
-
-        inputHandler.OnSprintAction += InputHandler_OnSprintAction;
-    }
-
-    private void InputHandler_OnSprintAction(object sender, System.EventArgs e)
-    {
-        isRunning = true;
-        
     }
 
     private void Update()
     {
+        //INPUT HANDLER VOID UPDATE
+        inputHandler.UpdateInput();
+
         MovementHandler();
-        Run();
+        //Run();
     }
 
     public bool IsWalking()
@@ -43,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
     #region Movement
     private void MovementHandler()
     {
+
         Vector2 inputVector = inputHandler.GetMovementVectorNormalized();
 
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
@@ -96,17 +92,12 @@ public class PlayerMovement : MonoBehaviour
         transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
     }
     #endregion
-
-    private void Run()
+    /*private void Run()
     {
-        if(isRunning == true)
+        if (inputHandler.canSprint)
         {
+            isRunning = true;
             moveSpeed = runSpeed;
         }
-        else
-        {
-            moveSpeed = 3f;
-            IsRunning();
-        }
-    }
+    }*/
 }

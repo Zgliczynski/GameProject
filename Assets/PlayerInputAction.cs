@@ -42,8 +42,17 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""id"": ""d1d01b88-6aed-4473-a418-3dee83f886c9"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Press(behavior=1)"",
+                    ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Run"",
+                    ""type"": ""Button"",
+                    ""id"": ""aef7167f-20b0-4045-9b32-b3c48ec79e95"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -189,6 +198,17 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""action"": ""Sprint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""162fdaae-eb18-42d9-b49b-9e0001943557"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -199,6 +219,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         m_PlayerMovement = asset.FindActionMap("PlayerMovement", throwIfNotFound: true);
         m_PlayerMovement_Movement = m_PlayerMovement.FindAction("Movement", throwIfNotFound: true);
         m_PlayerMovement_Sprint = m_PlayerMovement.FindAction("Sprint", throwIfNotFound: true);
+        m_PlayerMovement_Run = m_PlayerMovement.FindAction("Run", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -262,12 +283,14 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     private List<IPlayerMovementActions> m_PlayerMovementActionsCallbackInterfaces = new List<IPlayerMovementActions>();
     private readonly InputAction m_PlayerMovement_Movement;
     private readonly InputAction m_PlayerMovement_Sprint;
+    private readonly InputAction m_PlayerMovement_Run;
     public struct PlayerMovementActions
     {
         private @PlayerInputAction m_Wrapper;
         public PlayerMovementActions(@PlayerInputAction wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_PlayerMovement_Movement;
         public InputAction @Sprint => m_Wrapper.m_PlayerMovement_Sprint;
+        public InputAction @Run => m_Wrapper.m_PlayerMovement_Run;
         public InputActionMap Get() { return m_Wrapper.m_PlayerMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -283,6 +306,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
+            @Run.started += instance.OnRun;
+            @Run.performed += instance.OnRun;
+            @Run.canceled += instance.OnRun;
         }
 
         private void UnregisterCallbacks(IPlayerMovementActions instance)
@@ -293,6 +319,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
+            @Run.started -= instance.OnRun;
+            @Run.performed -= instance.OnRun;
+            @Run.canceled -= instance.OnRun;
         }
 
         public void RemoveCallbacks(IPlayerMovementActions instance)
@@ -314,5 +343,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
+        void OnRun(InputAction.CallbackContext context);
     }
 }
