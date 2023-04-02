@@ -4,101 +4,176 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 3f;
-    [SerializeField] private float runSpeed = 7f;
-    [SerializeField] InputHandler inputHandler;
+    private PlayerManager playerManager;
+    private InputManager inputManager;
+    private PlayerAnimator playerAnimator;
 
-    [SerializeField] private bool isWalking;
-    [SerializeField] private bool isRunning;
     private Rigidbody rigidbody;
+    private Vector3 moveDirection;
+    private Transform cameraObject;
 
-    private void Start()
+    [Header("Movement Flags")]
+    public bool isSprinting;
+    public bool isGrounded;
+    public bool isJumping;
+
+    [Header("Move Stats")]
+    public float walkingSpeed = 3f;
+    public float runningSpeed = 5f;
+    public float sprintingSpeed = 7f;
+    public float rotationSpeed = 15f;
+
+    [Header("Falling")]
+    public float inAirTimer;
+    public float leapingVelocity;
+    public float fallingVelocity;
+    public float rayCastHeighOffSet = 0.5f;
+    public LayerMask groundLayer;
+
+    [Header("Jumping")]
+    public float jumpHeight = 3f;
+    public float gravityIntensity = -15f;
+
+    private void Awake()
     {
+        playerManager = GetComponent<PlayerManager>();
+        inputManager = GetComponent<InputManager>();
+        playerAnimator = GetComponent<PlayerAnimator>();
         rigidbody = GetComponent<Rigidbody>();
+        cameraObject = Camera.main.transform;
+
+        isGrounded = true;
     }
 
-    private void Update()
+    public void PlayerMovementUpdate()
     {
-        //INPUT HANDLER VOID UPDATE
-        inputHandler.UpdateInput();
+        HandleFallingAndLanding();
+        if (playerManager.isInteracting)
+            return;
 
-        MovementHandler();
-        //Run();
+        HandleMovement();
+        HandleRotation();
     }
 
-    public bool IsWalking()
+    #region Movement & Rotation
+    private void HandleMovement()
     {
-        return isWalking;
-    }
+        if (isJumping)
+            return;
 
-    public bool IsRunning()
-    {
-        return isRunning;
-    }
-    #region Movement
-    private void MovementHandler()
-    {
+        moveDirection = cameraObject.forward * inputManager.verticalInput;
+        moveDirection = moveDirection + cameraObject.right * inputManager.horizontalInput;
+        moveDirection.Normalize();
+        moveDirection.y = 0;
 
-        Vector2 inputVector = inputHandler.GetMovementVectorNormalized();
-
-        Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
-
-        float moveDistance = moveSpeed * Time.deltaTime;
-        float playerRadius = 0.2f;
-        float playerHight = 1.8f;
-        bool canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHight, playerRadius, moveDir, moveDistance);
-
-        if (!canMove)
+        if (isSprinting)
         {
-            //Cannot move towards moveDir
-
-            //Attemp only X movement
-            Vector3 moveDirX = new Vector3(moveDir.x, 0f, 0f).normalized;
-            canMove = moveDir.x != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHight, playerRadius, moveDirX, moveDistance);
-
-            if (canMove)
+            moveDirection = moveDirection * sprintingSpeed;
+        }
+        else
+        {
+            if (inputManager.moveAmount >= 0.5f)
             {
-                //Can move only on X
-                moveDir = moveDirX;
+                //If we running, select the runningSpeed
+                moveDirection = moveDirection * runningSpeed;
             }
             else
             {
-                //Cannot move only on the X
-
-                //Attemp only Z movement
-                Vector3 moveDirZ = new Vector3(0f, 0f, moveDir.z).normalized;
-                canMove = moveDir.z != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHight, playerRadius, moveDirZ, moveDistance);
-
-                if (canMove)
-                {
-                    //Can move only on Z
-                    moveDir = moveDirZ;
-                }
-                else
-                {
-                    //Cannot move in any direction
-                }
+                //If we walking, select the walkingSpeed
+                moveDirection = moveDirection * walkingSpeed;
             }
         }
+        
+        Vector3 movementVelocity = moveDirection;
+        rigidbody.velocity = movementVelocity;
+        
+    }
 
-        if (canMove)
-        {
-            transform.position += moveDir * moveDistance;
-        }
+    private void HandleRotation()
+    {
+        if (isJumping)
+            return;
 
-        isWalking = moveDir != Vector3.zero;
+        Vector3 targetDirection = Vector3.zero;
 
-        float rotateSpeed = 10f;
-        transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
+        targetDirection = cameraObject.forward * inputManager.verticalInput;
+        targetDirection = targetDirection + cameraObject.right * inputManager.horizontalInput;
+        targetDirection.Normalize();
+        targetDirection.y = 0;
+
+        if (targetDirection == Vector3.zero)
+            targetDirection = transform.forward;
+
+        Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+        Quaternion playerRotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+
+        transform.rotation = playerRotation;
     }
     #endregion
-    /*private void Run()
+
+    #region Falling, Landing & Jumping
+    private void HandleFallingAndLanding() 
     {
-        if (inputHandler.canSprint)
+        RaycastHit hit;
+        Vector3 rayCastOrigin = transform.position;
+        Vector3 targetPosition;
+        rayCastOrigin.y = rayCastOrigin.y + rayCastHeighOffSet;
+        targetPosition = transform.position;
+
+        if (!isGrounded && !isJumping)
         {
-            isRunning = true;
-            moveSpeed = runSpeed;
+            if (!playerManager.isInteracting)
+            {
+                playerAnimator.PlayTargetAnimation("Falling", true);
+            }
+
+            inAirTimer = inAirTimer + Time.deltaTime;
+            rigidbody.AddForce(transform.forward * leapingVelocity);
+            rigidbody.AddForce(-Vector3.up * fallingVelocity * inAirTimer);
         }
-    }*/
-    //Test
+
+        if (Physics.SphereCast(rayCastOrigin, 0.2f, Vector3.down, out hit, 0.5f,groundLayer))
+        {
+            if (!isGrounded && !playerManager.isInteracting)
+            {
+                playerAnimator.PlayTargetAnimation("Land", true);
+            }
+
+            Vector3 rayCastHitPoint = hit.point;
+            targetPosition.y = rayCastHitPoint.y;
+            inAirTimer = 0;
+            isGrounded = true;
+        }
+        else
+        {
+            isGrounded = false;
+        }
+
+        if(isGrounded)
+        {
+            if (playerManager.isInteracting || inputManager.moveAmount > 0)
+            {
+                transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime / 0.1f);
+            }
+            else
+            {
+                transform.position = targetPosition;
+            }
+        }
+    }
+
+    public void HandleJumping()
+    {
+       if (isGrounded)
+        {
+            playerAnimator.animator.SetBool("isJumping", true);
+            playerAnimator.PlayTargetAnimation("Jump", false);
+
+            float jumpingVelocity = Mathf.Sqrt(-2 * gravityIntensity * jumpHeight);
+            Vector3 playerVelocity = moveDirection;
+            playerVelocity.y = jumpingVelocity;
+            rigidbody.velocity = playerVelocity;
+        }
+    }
+    #endregion
 }

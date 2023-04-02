@@ -7,30 +7,12 @@
             "actions": [
                 {
                     "name": "Movement",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "088994e9-dfaf-4967-8af4-444b0b5ad8ee",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
-                },
-                {
-                    "name": "Sprint",
-                    "type": "Button",
-                    "id": "d1d01b88-6aed-4473-a418-3dee83f886c9",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "Run",
-                    "type": "Button",
-                    "id": "aef7167f-20b0-4045-9b32-b3c48ec79e95",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -48,7 +30,7 @@
                 {
                     "name": "WASD",
                     "id": "ebf8f639-1276-4f0a-ae25-d52426a8252b",
-                    "path": "2DVector",
+                    "path": "2DVector(mode=2)",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -103,7 +85,7 @@
                 {
                     "name": "Arrow",
                     "id": "2e2c99ec-6c7a-4c55-b91a-1254c5adada4",
-                    "path": "2DVector",
+                    "path": "2DVector(mode=2)",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -154,21 +136,36 @@
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
-                },
+                }
+            ]
+        },
+        {
+            "name": "PlayerAction",
+            "id": "9a8bc50e-6206-4a3f-95c1-d3601064daf2",
+            "actions": [
                 {
-                    "name": "",
-                    "id": "313cc503-6ab8-43a0-a99b-bdb33fa819d0",
-                    "path": "<Keyboard>/shift",
-                    "interactions": "",
+                    "name": "Sprint",
+                    "type": "Button",
+                    "id": "f5d93cac-c336-4ccd-80d5-7ee00406d8ce",
+                    "expectedControlType": "Button",
                     "processors": "",
-                    "groups": "",
-                    "action": "Sprint",
-                    "isComposite": false,
-                    "isPartOfComposite": false
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "33d1901d-c39e-49f8-bc3b-3f1f74263b8f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
                     "name": "",
-                    "id": "a4343930-4c26-4afc-88a6-fd37d477acab",
+                    "id": "277904ca-aee1-4e79-9588-2dd7a7ad9a96",
                     "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
@@ -179,12 +176,34 @@
                 },
                 {
                     "name": "",
-                    "id": "162fdaae-eb18-42d9-b49b-9e0001943557",
-                    "path": "<Gamepad>/leftTrigger",
+                    "id": "7e524194-475c-4f6c-9d6b-e685487758f1",
+                    "path": "<Keyboard>/shift",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Run",
+                    "action": "Sprint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f7f15fa3-9876-4f5d-8a08-6c2ddfc636d1",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "34a64e53-c8ea-48f9-b54f-017a28a5fb47",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
