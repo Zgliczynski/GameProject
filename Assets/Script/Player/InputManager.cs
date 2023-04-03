@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Jump is write but not implemeted to game
 public class InputManager : MonoBehaviour
 {
     public PlayerInputAction playerInputAction;
@@ -15,7 +16,7 @@ public class InputManager : MonoBehaviour
     public float moveAmount;
 
     public bool sprintInput;
-    public bool jumpInput;
+    //public bool jumpInput;
 
     private void Awake()
     {
@@ -33,7 +34,7 @@ public class InputManager : MonoBehaviour
 
             playerInputAction.PlayerAction.Sprint.performed += i => sprintInput = true;
             playerInputAction.PlayerAction.Sprint.canceled += i => sprintInput = false;
-            playerInputAction.PlayerAction.Jump.performed += i => jumpInput = true;
+            //playerInputAction.PlayerAction.Jump.performed += i => jumpInput = true;
         }
 
         playerInputAction.Enable();
@@ -48,7 +49,7 @@ public class InputManager : MonoBehaviour
     {
         HandleMovementInput();
         HandleSprintingInput();
-        HandleJumpingInput();
+        //HandleJumpingInput();
     }
 
     private void HandleMovementInput()
@@ -71,13 +72,13 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    private void HandleJumpingInput()
+   /* private void HandleJumpingInput()
     {
         if (jumpInput)
         {
             jumpInput = false;
             playerMovement.HandleJumping();
         }
-    }
+    }*/
 }
 

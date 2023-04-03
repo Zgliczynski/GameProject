@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//Jump is write but not implemeted to game
 public class PlayerMovement : MonoBehaviour
 {
     private PlayerManager playerManager;
@@ -30,9 +32,9 @@ public class PlayerMovement : MonoBehaviour
     public float rayCastHeighOffSet = 0.5f;
     public LayerMask groundLayer;
 
-    [Header("Jumping")]
+    /*[Header("Jumping")]
     public float jumpHeight = 3f;
-    public float gravityIntensity = -15f;
+    public float gravityIntensity = -15f;*/
 
     private void Awake()
     {
@@ -58,9 +60,6 @@ public class PlayerMovement : MonoBehaviour
     #region Movement & Rotation
     private void HandleMovement()
     {
-        if (isJumping)
-            return;
-
         moveDirection = cameraObject.forward * inputManager.verticalInput;
         moveDirection = moveDirection + cameraObject.right * inputManager.horizontalInput;
         moveDirection.Normalize();
@@ -91,9 +90,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleRotation()
     {
-        if (isJumping)
-            return;
-
         Vector3 targetDirection = Vector3.zero;
 
         targetDirection = cameraObject.forward * inputManager.verticalInput;
@@ -120,7 +116,7 @@ public class PlayerMovement : MonoBehaviour
         rayCastOrigin.y = rayCastOrigin.y + rayCastHeighOffSet;
         targetPosition = transform.position;
 
-        if (!isGrounded && !isJumping)
+        if (!isGrounded /*&& !isJumping*/)
         {
             if (!playerManager.isInteracting)
             {
@@ -162,7 +158,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void HandleJumping()
+    /*public void HandleJumping()
     {
        if (isGrounded)
         {
@@ -174,6 +170,6 @@ public class PlayerMovement : MonoBehaviour
             playerVelocity.y = jumpingVelocity;
             rigidbody.velocity = playerVelocity;
         }
-    }
+    }*/
     #endregion
 }

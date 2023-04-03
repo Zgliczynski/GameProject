@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Jump is write but not implemeted to game
 public class PlayerManager : MonoBehaviour
 {
     private Animator animator;
@@ -31,7 +32,7 @@ public class PlayerManager : MonoBehaviour
     {
         isInteracting = animator.GetBool("isInteracting");
         animator.SetBool("isGrounded", playerMovement.isGrounded);
-        playerMovement.isJumping = animator.GetBool("isJumping");
+        //playerMovement.isJumping = animator.GetBool("isJumping");
 
     }
 }
