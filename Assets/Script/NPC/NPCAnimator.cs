@@ -4,15 +4,33 @@ using UnityEngine;
 
 public class NPCAnimator : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private Animator animator;
+    private NPCMovement npcMovement;
+
+    private void Start()
     {
-        
+        animator = GetComponent<Animator>();
+        npcMovement = GetComponent<NPCMovement>();
+        npcMovement.velocity = Animator.StringToHash("Velocity");
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        PlayAnimation();
     }
+
+    private void PlayAnimation()
+    {
+        if(npcMovement.velocity > 0)
+        {
+            animator.SetBool("IsWalk", npcMovement.isWalk);
+        }
+
+        if(npcMovement.velocity == 0)
+        {
+            animator.SetBool("IsDancing", npcMovement.isDancing);
+        }
+    }
+
+
 }

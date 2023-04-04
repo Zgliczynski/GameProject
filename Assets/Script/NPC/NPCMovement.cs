@@ -6,10 +6,13 @@ using UnityEngine.AI;
 public class NPCMovement : MonoBehaviour
 {
     private NPCSpawner npcSpawner;
-    //[SerializeField] private Transform targetPosition;
+    [SerializeField] private Transform targetPosition;
     [SerializeField] NavMeshAgent agent;
-    [SerializeField] private Vector3 target;
+    public bool isWalk;
+    public bool isDancing;
+    //[SerializeField] private Vector3 target;
 
+    public float velocity;
 
     private void Awake()
     {
@@ -18,6 +21,17 @@ public class NPCMovement : MonoBehaviour
 
     private void Update()
     {
-        agent.SetDestination(target);
+        agent.destination = targetPosition.position;
+        velocity = agent.speed;
+
+        if(velocity > 0)
+        {
+            isWalk = true;
+        }
+        else if(velocity == 0)
+        {
+            isDancing = true;
+            isWalk = false;
+        }
     }
 }

@@ -1821,6 +1821,7 @@ GameObject:
   - component: {fileID: 6287327844459974928}
   - component: {fileID: 1880541276875374174}
   - component: {fileID: 8885440839170733922}
+  - component: {fileID: 7854939095348997798}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -1836,7 +1837,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6579902016554299687}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -5.93}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1952,8 +1953,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a69a6a0fa6e184342ae973cc2942f03e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPosition: {fileID: 9175944154793770680, guid: 4c8ca01d24299e84bb027b71e1b7c2dd,
+    type: 3}
   agent: {fileID: 2720538137727362194}
-  target: {x: 28.8, y: 1.9, z: 7.4}
+  isWalk: 0
+  velocity: 0
+--- !u!95 &7854939095348997798
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6579902016554299687}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 81bb9eea30387e442899949a80011e55, type: 3}
+  m_Controller: {fileID: 9100000, guid: 638da02e829724443b277ddb8c07cb27, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6870981014348390612
 GameObject:
   m_ObjectHideFlags: 0
