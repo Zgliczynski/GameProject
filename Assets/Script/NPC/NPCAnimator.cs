@@ -21,16 +21,7 @@ public class NPCAnimator : MonoBehaviour
 
     private void PlayAnimation()
     {
-        if(npcMovement.velocity > 0)
-        {
-            animator.SetBool("IsWalk", npcMovement.isWalk);
-        }
-
-        if(npcMovement.velocity == 0)
-        {
-            animator.SetBool("IsDancing", npcMovement.isDancing);
-        }
+        animator.SetBool("IsWalk", npcMovement.isWalk);
+        animator.SetBool("IsDancing", npcMovement.isDancing);
     }
-
-
 }

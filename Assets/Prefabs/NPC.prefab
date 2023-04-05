@@ -1905,7 +1905,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: -334000983
   m_Radius: 0.2
-  m_Speed: 3.5
+  m_Speed: 3
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -1955,8 +1955,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetPosition: {fileID: 9175944154793770680, guid: 4c8ca01d24299e84bb027b71e1b7c2dd,
     type: 3}
+  plane: {fileID: 6084582520680096914, guid: 9d96160b5b9acef409b04747a9b29b0c, type: 3}
   agent: {fileID: 2720538137727362194}
   isWalk: 0
+  isDancing: 0
   velocity: 0
 --- !u!95 &7854939095348997798
 Animator:
